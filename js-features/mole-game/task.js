@@ -9,6 +9,13 @@ const lostCounter = document.getElementById('lost');
 let deadCount = 0;
 let lostCount = 0;
 
+let clear = () => {  
+  deadCount = 0;
+  lostCount = 0;
+  deadCounter.textContent = deadCount;
+  lostCounter.textContent = lostCount;
+}
+
 const checkMole = event => {
   const target = event.target;
   if (target.classList.contains('hole_has-mole')) {
@@ -19,12 +26,12 @@ const checkMole = event => {
     lostCounter.textContent = lostCount;
   }
   if (deadCount === 10) {
+    clear();
     alert('Вы выиграли!');
-    playing = false;
   }
   if (lostCount === 5) {
+    clear();
     alert('Вы проиграли!');
-    playing = false;
   }
 }
 
