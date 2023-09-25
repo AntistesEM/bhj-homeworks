@@ -4,6 +4,7 @@ class Game {
     this.wordElement = container.querySelector('.word');
     this.winsElement = container.querySelector('.status__wins');
     this.lossElement = container.querySelector('.status__loss');
+    this.timerElement = container.querySelector('.timer__countdown'); 
 
     this.reset();
 
@@ -16,15 +17,35 @@ class Game {
     this.lossElement.textContent = 0;
   }
 
+  startTimer(word) {
+    if (this.timer) {
+      clearInterval(this.timer)
+    }
+
+    let timeLeft = word.length;
+    this.timerElement.textContent = timeLeft;
+  
+    this.timer = setInterval(() => {
+      timeLeft--;
+      this.timerElement.textContent = timeLeft;
+      
+      if (timeLeft === 0) {
+        this.fail();
+      }
+    }, 1000);
+  }
+
+
   registerEvents() {
-    /*
-      TODO:
-      Написать обработчик события, который откликается
-      на каждый введённый символ.
-      В случае правильного ввода слова вызываем this.success()
-      При неправильном вводе символа - this.fail();
-      DOM-элемент текущего символа находится в свойстве this.currentSymbol.
-     */
+    document.addEventListener('keydown', (event) => {
+      console.log(event.code)
+        if (event.key.toLowerCase() === this.currentSymbol.textContent.toLowerCase()) {
+          console.log(this.currentSymbol.textContent)
+          this.success();
+        } else {
+          this.fail();
+        };
+    });
   }
 
   success() {
@@ -51,16 +72,17 @@ class Game {
     }
     this.setNewWord();
   }
-
+  
   setNewWord() {
     const word = this.getWord();
 
     this.renderWord(word);
+    this.startTimer(word)
   }
 
   getWord() {
     const words = [
-        'bob',
+        'привет kety',
         'awesome',
         'netology',
         'hello',
@@ -73,7 +95,7 @@ class Game {
         'javascript'
       ],
       index = Math.floor(Math.random() * words.length);
-
+    
     return words[index];
   }
 
