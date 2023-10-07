@@ -1,6 +1,15 @@
 body {
   font-family: Arial;
 }
+
+.cart {
+  display: none;
+}
+
+.cart_active {
+  display: block;
+}
+
 .cart__products {
   display: flex;
   justify-content: center;
@@ -80,6 +89,11 @@ body {
   color: #fff;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.remove {
+  background: red;
+  margin: 0 5px;
 }
 
 .product__add:hover {
