@@ -45,10 +45,11 @@ btnAdd.addEventListener('click', (e) => {
 
 	if (input.value.trim() !== '') {
 		insertHtml(input.value);
+		
+		returnObj.push(input.value);
+		input.value = '';
+	
+		localStorageSave();
 	};
 
-	returnObj.push(input.value);
-	input.value = '';
-
-	localStorageSave();
 });
