@@ -2,7 +2,7 @@ const input = document.getElementById('task__input');
 const btnAdd = document.getElementById('tasks__add');
 const tasksList = document.getElementById('tasks__list');
 
-let returnObj = JSON.parse(localStorage.getItem("myKey")) || [];
+let returnObj = JSON.parse(localStorage.getItem("Tasks")) || [];
 
 function insertHtml(params) {
 	const html = `
