@@ -1,15 +1,15 @@
 const controls = Array.from(document.querySelectorAll('.product'));
 const cart = document.querySelector('.cart__products');
-let cartSave = JSON.parse(localStorage.getItem("myKey")) || {};
+let cartSave = JSON.parse(localStorage.getItem("basket")) || {};
 const cartVisible = document.querySelector('.cart');
-// const ids = Array.from(cart.querySelectorAll('.cart__product'));
+let ids;
 
 emptyOrNot();
 
 function emptyOrNot() {
-	if ("myKey" in localStorage) {
+	if ("basket" in localStorage) {
 		if (Object.keys(cartSave).length !== 0) {
-			const ids = Array.from(cart.querySelectorAll('.cart__product'));
+			ids = Array.from(cart.querySelectorAll('.cart__product'));
 
 			ids.forEach(function(element) {
 				element.remove();
@@ -42,7 +42,7 @@ function insertHtml(idValue, srcValue, countValue) {
 };
 
 function localStorageSave() {
-	localStorage.setItem("myKey", JSON.stringify(cartSave));
+	localStorage.setItem("basket", JSON.stringify(cartSave));
 	emptyOrNot();
 };
 
@@ -62,19 +62,25 @@ controls.forEach(control => {
 		} else if (e.target.classList.contains('product__add')) {
 			const id = control.getAttribute('data-id');
 			const src = control.querySelector('img').getAttribute('src');
-			const ids = Array.from(cart.querySelectorAll('.cart__product'));
+			ids = Array.from(cart.querySelectorAll('.cart__product'));
 			const hasTargetId = ids.some(item => item.dataset.id === id);
 
 			if (hasTargetId) {
 				let product = ids.find(item => item.dataset.id === id);
 				let count = product.querySelector('.cart__product-count');
+
+				if (Object.keys(cartSave).length !== 0) {
+					animation(id, control, ids);			
+				};
+
 				count.textContent = Number(count.textContent) + Number(value.textContent);
 				cartSave[id][2] = count.textContent;
 
 				localStorageSave();
 
+				
 				value.textContent = 1;
-
+				
 			} else {
 				cartSave[id] = [id, src, value.textContent];
 
@@ -95,3 +101,40 @@ cart.addEventListener('click', (e) => {
 	};
 });
 
+function animation(id, control, ids) {
+	let product = ids.find(item => item.dataset.id === id);
+	if (product) {
+		const productImage = control.querySelector('img');
+		const cartImage = product.querySelector('img');
+		const productRect = productImage.getBoundingClientRect();
+		const cartRect = cartImage.getBoundingClientRect();
+		const diffX = cartRect.left - productRect.left;
+		const diffY = cartRect.top - productRect.top;
+		let steps = 50;
+		const stepX = diffX / steps;
+		const stepY = diffY / steps;
+		
+		const clonedImage = productImage.cloneNode(false);
+		clonedImage.style.position = 'fixed';
+		clonedImage.style.left = productRect.left + 'px';
+		clonedImage.style.top = productRect.top + 'px';
+		
+		control.appendChild(clonedImage);
+
+		const animationInterval = setInterval(() => {
+			const left = parseFloat(clonedImage.style.left) + stepX;
+			const top = parseFloat(clonedImage.style.top) + stepY;
+
+			clonedImage.style.left = left + 'px';
+			clonedImage.style.top = top + 'px';
+
+			steps--;
+
+			if (steps === 0) {
+				clearInterval(animationInterval);
+
+				control.removeChild(clonedImage);
+			};
+		}, 10);
+	};
+};
