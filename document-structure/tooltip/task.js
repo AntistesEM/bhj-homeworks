@@ -1,18 +1,31 @@
-let hasTooltips = Array.from(document.querySelectorAll('.has-tooltip'))
+let hasTooltips = Array.from(document.querySelectorAll('.has-tooltip'));
+
+const newElement = document.createElement('div');
+newElement.setAttribute('class', 'tooltip');
+newElement.style.left = 0;
+newElement.style.top = 0;
+newElement.style.position = 'absolute';
+
+hasTooltips[0].appendChild(newElement);
+
 
 hasTooltips.forEach(tooltip => {
 	tooltip.addEventListener('click', (event) => {
-		event.preventDefault()
+		event.preventDefault();
 
-		let activ = document.querySelector('.tooltip_active')
+		let activ = document.querySelector('.tooltip');
 
 		if (activ) {
-			activ.classList.toggle('tooltip_active')
-		} 
-
-		let { left, top } = tooltip.getBoundingClientRect()
-		let html = `<div class="tooltip tooltip_active" style="left: ${(left + window.scrollX).toString() + 'px'}; top: ${(top + 22 + window.scrollY).toString() + 'px'}; position: absolute ">${tooltip.title}</div>`
-
-		tooltip.insertAdjacentHTML("afterend", html)
-	})
-})
+			activ.classList.toggle('tooltip_active');
+		};
+		
+		let { left, top } = tooltip.getBoundingClientRect();
+		let styleLeft = (left + window.scrollX).toString() + 'px';
+		let styleTop = (top + 22 + window.scrollY).toString() + 'px';
+		let text = tooltip.title;
+		
+		activ.style.left = styleLeft;
+		activ.style.top = styleTop;
+		activ.textContent = text;
+	});
+});
