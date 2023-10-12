@@ -6,7 +6,7 @@ newElement.style.left = 0;
 newElement.style.top = 0;
 newElement.style.position = 'absolute';
 
-hasTooltips[0].appendChild(newElement);
+document.body.appendChild(newElement);
 
 
 hasTooltips.forEach(tooltip => {
